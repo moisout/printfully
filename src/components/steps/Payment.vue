@@ -5,10 +5,18 @@
       <template v-slot:subtitle>Overview</template>
       <template v-slot:content>
         <div class="summary" v-if="formData && formData.file && formData.modelConfiguration">
-          <div class="summary-entry" v-if="formData">Name: {{ formData.file.name }} CHF</div>
+          <div class="summary-entry" v-if="formData">Name: {{ formData.file.name }}</div>
           <div class="summary-entry" v-if="formData">Price: {{ price }} CHF</div>
-          <div class="summary-entry" v-if="formData">Price: {{ price }} CHF</div>
-          <div class="summary-entry" v-if="formData">Price: {{ price }} CHF</div>
+          <div class="summary-entry" v-if="formData">
+            Height: {{ formData.modelConfiguration.size }} CHF
+          </div>
+          <div
+            class="summary-entry"
+            v-if="formData"
+            :style="{ 'background-color': `#${formData.modelConfiguration.color}` }"
+          >
+            Color: #{{ formData.modelConfiguration.color }} CHF
+          </div>
         </div>
       </template>
       <template v-slot:footer>
@@ -49,9 +57,11 @@ export default defineComponent({
     }
 
     const nextPage = () => {
-      emit('next-page', {
-        pageIndex: 2
-      });
+      setTimeout(() => {
+        emit('next-page', {
+          pageIndex: 2
+        });
+      }, 1000);
     };
     const prevPage = () => {
       emit('prev-page', { pageIndex: 2 });
