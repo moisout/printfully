@@ -19,4 +19,5 @@ declare module 'three/build/three.module' {
   export const Mesh: any;
   export const Vector3: any;
   export const Matrix4: any;
+  export const PointLight: any;
 }

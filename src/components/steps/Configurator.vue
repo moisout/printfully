@@ -9,8 +9,15 @@
             <div id="model" ref="modelRef"></div>
           </div>
           <div class="configuration-panel">
-            Configure
+            <span class="p-float-label">
+              <InputText id="color" type="text" v-model="modelConfiguration.color" />
+              <label for="color">Color</label>
+            </span>
             <ColorPicker v-model="modelConfiguration.color" :inline="true" />
+            <span class="p-float-label">
+              <InputNumber id="size" v-model="modelConfiguration.height" />
+              <label for="size">Size (cm)</label>
+            </span>
           </div>
         </div>
       </template>
@@ -29,7 +36,7 @@ import { defineComponent, onMounted, reactive, Ref, ref, watch } from 'vue';
 import * as THREE from 'three/build/three.module';
 import { OrbitControls } from '../../bin/OrbitControls';
 import { STLLoader } from '../../bin/STLLoader';
-import { onBeforeRouteUpdate } from 'vue-router';
+import { onBeforeRouteUpdate, useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'Configurator',
@@ -37,9 +44,16 @@ export default defineComponent({
     formData: Object
   },
   setup(props, { emit }) {
+    const router = useRouter();
+    if (!(props.formData && props.formData.file)) {
+      router.push('/');
+    }
+
     const nextPage = () => {
       emit('next-page', {
-        formData: {},
+        formData: {
+          modelConfiguration
+        },
         pageIndex: 1
       });
     };
@@ -51,7 +65,8 @@ export default defineComponent({
     const modelRef = ref(null);
 
     const modelConfiguration = reactive({
-      color: 'ff5533'
+      color: 'ff5533',
+      height: 10
     });
 
     const STLViewer = (model: string) => {
@@ -81,11 +96,10 @@ export default defineComponent({
 
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
-        controls.rotateSpeed = 0.05;
+        controls.rotateSpeed = 0.5;
         controls.dampingFactor = 0.1;
         controls.enableZoom = true;
-        controls.autoRotate = true;
-        controls.autoRotateSpeed = 0.75;
+        controls.autoRotate = false;
 
         const scene = new THREE.Scene();
         scene.add(new THREE.HemisphereLight(0xffffff, 1.5));
@@ -112,7 +126,7 @@ export default defineComponent({
             geometry.boundingBox.max.y,
             geometry.boundingBox.max.z
           );
-          camera.position.z = largestDimension * 1.5;
+          camera.position.z = largestDimension * 1.7;
 
           const animate = () => {
             requestAnimationFrame(animate);
@@ -179,6 +193,19 @@ export default defineComponent({
       canvas {
         height: 100%;
       }
+    }
+  }
+
+  .configuration-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: flex-start;
+
+    text-align: left;
+
+    .p-colorpicker {
+      margin: 10px 0 20px 0;
     }
   }
 }

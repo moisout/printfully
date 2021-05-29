@@ -14,6 +14,8 @@ import Card from 'primevue/card';
 import Button from 'primevue/button';
 import FileUpload from 'primevue/fileupload';
 import ColorPicker from 'primevue/colorpicker';
+import InputNumber from 'primevue/inputnumber';
+import InputText from 'primevue/inputtext';
 
 const app = createApp(App);
 app.use(router);
@@ -25,5 +27,7 @@ app.component('Card', Card);
 app.component('Button', Button);
 app.component('FileUpload', FileUpload);
 app.component('ColorPicker', ColorPicker);
+app.component('InputNumber', InputNumber);
+app.component('InputText', InputText);
 
 app.mount('#app');
